@@ -14,7 +14,8 @@ jobs:
           cd $GITHUB_WORKSPACE
           rustup default 1.50
           cargo check --all-targets --all-features
-          cargo test --all-features
+          cargo test
+          cargo test --features quanta
     strategy:
       matrix:
         include:
@@ -38,4 +39,5 @@ jobs:
           cd %GITHUB_WORKSPACE%
           rustup default 1.50
           cargo check --all-targets --all-features
-          cargo test --all-features
+          cargo test
+          cargo test --features quanta
