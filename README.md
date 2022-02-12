@@ -24,6 +24,8 @@ macro, there is also a `OnlyEvery` type.  I suggest
 something like [governor](https://docs.rs/governor/latest/governor/) if you need
 more than "execute this once every x".
 
-A caveat that probably doesn't matter: if the expression executes less
-frequently than `u64::MAX / 2 - 1` ms, behavior is undefined due to internal
-wrapping.
+For completeness, internally we hold times in an i64 as ms since the process
+started.  Behavior is undefined if your process runs for long enough that `pt +
+interval > i64::MAX` where `pt` is the uptime of the process and units are in
+ms.  In other words, let me know if you have a billion years of continuous
+uptime and I'll fix it for you.

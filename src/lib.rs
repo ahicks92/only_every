@@ -1,5 +1,4 @@
 #![allow(dead_code)]
-mod compare_times;
 mod only_every;
 #[cfg(quanta)]
 mod quanta_time_source;
