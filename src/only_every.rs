@@ -20,6 +20,12 @@ pub struct OnlyEvery {
     last: AtomicI64,
 }
 
+/// Round a duration up to the next ms, then return that number of ms.
+fn round_up(interval: Duration) -> i64 {
+    let r = interval.as_secs() * 1000 + (interval.subsec_nanos() as u64 + 1000000 - 1) / 1000000;
+    r as i64
+}
+
 impl OnlyEvery {
     pub fn new() -> OnlyEvery {
         let time_source = TimeSource::new();
@@ -35,11 +41,9 @@ impl OnlyEvery {
     ///
     /// interval is rounded up to the next ms.
     pub fn check(&self, interval: Duration) -> bool {
+        let interval_ms = round_up(interval);
         let now = self.time_source.now_ms() as i64;
         let last = self.last.load(Ordering::Relaxed);
-        let interval_ms_u128 = (interval + Duration::from_millis(1)).as_millis();
-        debug_assert!(interval_ms_u128 <= i64::MAX as u128);
-        let interval_ms = interval_ms_u128 as i64;
         let next = last.saturating_add(interval_ms);
 
         if now < next {
@@ -51,4 +55,11 @@ impl OnlyEvery {
             .compare_exchange(last, now, Ordering::Relaxed, Ordering::Relaxed)
             .is_ok()
     }
+}
+
+#[test]
+fn test_round_up() {
+    assert_eq!(round_up(Duration::from_secs(0)), 0);
+    assert_eq!(round_up(Duration::from_nanos(500)), 1);
+    assert_eq!(round_up(Duration::new(1, 500000)), 1001);
 }
