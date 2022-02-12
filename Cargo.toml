@@ -2,7 +2,7 @@
 name = "only_every"
 version = "0.1.0"
 edition = "2018"
-license = "unlicense"
+license = "Unlicense"
 description = "A simple rate-limiter macro: only_every!(Duration::from_millis(200), expensive_expression)"
 readme = "README.md"
 repository = "https://github.com/ahicks92/only_every"
