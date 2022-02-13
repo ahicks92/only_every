@@ -4,7 +4,7 @@
 //! you just want to evaluate an expression once every whatever interval, for
 //! example rate-limited logging.  This crate exposes a macro:
 //!
-//! ```
+//! ```ignore
 //! only_every!(Duration::from_millis(100), expensive_thing)
 //! ```
 //!
